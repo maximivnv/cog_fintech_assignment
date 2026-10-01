@@ -1,0 +1,9 @@
+initialize:
+  - name: Node 22
+    uses: github.com/actions/setup-node@v4
+    with:
+      node-version: "22"
+
+maintenance:
+  - name: Install dependencies
+    run: if [ -f package.json ]; then npm install; fi
