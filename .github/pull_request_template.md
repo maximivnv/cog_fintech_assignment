@@ -7,4 +7,4 @@
 ## Assumptions
 
 ## Evidence
-<!-- CI result, and a recording of the main flow for UI changes. -->
+<!-- CI result. -->
