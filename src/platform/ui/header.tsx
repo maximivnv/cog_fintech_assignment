@@ -12,11 +12,11 @@ export async function Header() {
 
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-8 px-6">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 px-6 pt-3 md:h-14 md:flex-nowrap md:pt-0">
         <Link href="/" className="shrink-0 text-sm font-semibold tracking-tight text-zinc-900">
           Internal Tools
         </Link>
-        <nav aria-label="Tools" className="flex h-full items-center gap-6 overflow-x-auto">
+        <nav aria-label="Tools" className="order-last flex h-10 w-full items-center gap-6 overflow-x-auto md:order-none md:h-full md:w-auto">
           {tools.map((t) => (
             <NavLink key={t.manifest.slug} href={`/tools/${t.manifest.slug}`}>
               {t.manifest.name}
@@ -25,7 +25,7 @@ export async function Header() {
           {user ? <NavLink href="/approvals">Approvals</NavLink> : null}
           {isAuditor ? <NavLink href="/audit">Audit log</NavLink> : null}
         </nav>
-        <div className="ml-auto flex shrink-0 items-center gap-4 text-sm">
+        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm md:shrink-0 md:flex-nowrap">
           {user ? (
             <>
               <span className="text-right leading-tight">
