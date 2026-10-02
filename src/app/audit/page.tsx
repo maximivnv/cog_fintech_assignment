@@ -12,6 +12,8 @@ import {
   toolRegistry,
   type AuditRow,
   type Column,
+  inputClass,
+  linkClass,
 } from "@/platform";
 
 const LIMIT = 200;
@@ -29,7 +31,7 @@ function prettyDetail(json: string): string {
 }
 
 const columns: Column<AuditRow>[] = [
-  { header: "#", cell: (r) => <span className="font-mono text-xs text-slate-500">{r.id}</span> },
+  { header: "#", cell: (r) => <span className="font-mono text-xs text-zinc-500">{r.id}</span> },
   { header: "When", cell: (r) => <span className="whitespace-nowrap">{when(r.ts)}</span> },
   { header: "Actor", cell: (r) => findUser(r.actor_id)?.name ?? r.actor_id },
   { header: "Tool", cell: (r) => getTool(r.tool)?.manifest.name ?? r.tool },
@@ -40,8 +42,8 @@ const columns: Column<AuditRow>[] = [
     header: "Detail",
     cell: (r) => (
       <details>
-        <summary className="cursor-pointer text-slate-500">view</summary>
-        <pre className="mt-1 max-w-xl overflow-x-auto whitespace-pre-wrap rounded bg-slate-50 p-2 text-xs">{prettyDetail(r.detail_json)}</pre>
+        <summary className={`cursor-pointer ${linkClass}`}>view</summary>
+        <pre className="mt-1 max-w-xl overflow-x-auto whitespace-pre-wrap rounded-md border border-zinc-200 bg-zinc-50 p-2 text-xs">{prettyDetail(r.detail_json)}</pre>
       </details>
     ),
   },
@@ -70,12 +72,12 @@ export default async function AuditPage({ searchParams }: PageProps<"/audit">) {
         description="Every action, denial and failure on the platform. Rows are append-only: nothing here can be edited or deleted."
         actions={
           <form method="get" className="flex items-center gap-2 text-sm">
-            <label htmlFor="tool" className="text-slate-600">Tool</label>
+            <label htmlFor="tool" className="text-zinc-600">Tool</label>
             <select
               id="tool"
               name="tool"
               defaultValue={tool ?? ""}
-              className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm"
+              className={`${inputClass} w-auto`}
             >
               <option value="">All tools</option>
               {tools.map((slug) => (
@@ -88,7 +90,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/audit">) {
           </form>
         }
       />
-      <p className="mb-2 text-sm text-slate-500">
+      <p className="mb-2 text-sm text-zinc-500">
         {rows.length === LIMIT ? `Latest ${LIMIT} rows` : `${rows.length} row${rows.length === 1 ? "" : "s"}`}
         {tool ? ` for ${getTool(tool)?.manifest.name ?? tool}` : ""}, newest first.
       </p>

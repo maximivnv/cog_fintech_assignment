@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentUser } from "../auth";
 import { logout } from "../auth-actions";
 import { toolsFor } from "../registry";
+import { NavLink } from "./nav-link";
 import { buttonClass } from "./primitives";
 
 export async function Header() {
@@ -10,40 +11,33 @@ export async function Header() {
   const isAuditor = user?.roles.includes("auditor") ?? false;
 
   return (
-    <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-        <Link href="/" className="text-base font-semibold text-slate-900">
+    <header className="border-b border-zinc-200 bg-white">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-8 px-6">
+        <Link href="/" className="shrink-0 text-sm font-semibold tracking-tight text-zinc-900">
           Internal Tools
         </Link>
-        <nav aria-label="Tools" className="flex flex-wrap items-center gap-x-4 text-sm">
+        <nav aria-label="Tools" className="flex h-full items-center gap-6 overflow-x-auto">
           {tools.map((t) => (
-            <Link key={t.manifest.slug} href={`/tools/${t.manifest.slug}`} className="text-slate-700 hover:text-slate-900">
+            <NavLink key={t.manifest.slug} href={`/tools/${t.manifest.slug}`}>
               {t.manifest.name}
-            </Link>
+            </NavLink>
           ))}
-          {user ? (
-            <Link href="/approvals" className="text-slate-700 hover:text-slate-900">
-              Approvals
-            </Link>
-          ) : null}
-          {isAuditor ? (
-            <Link href="/audit" className="text-slate-700 hover:text-slate-900">
-              Audit log
-            </Link>
-          ) : null}
+          {user ? <NavLink href="/approvals">Approvals</NavLink> : null}
+          {isAuditor ? <NavLink href="/audit">Audit log</NavLink> : null}
         </nav>
-        <div className="ml-auto flex items-center gap-3 text-sm">
+        <div className="ml-auto flex shrink-0 items-center gap-4 text-sm">
           {user ? (
             <>
-              <span className="text-slate-700">
-                <span className="font-medium text-slate-900">{user.name}</span>{" "}
-                <span className="text-slate-500">({user.roles.join(", ")})</span>
+              <span className="text-right leading-tight">
+                <span className="font-medium text-zinc-900">{user.name}</span>{" "}
+                <span className="text-zinc-500">({user.roles.join(", ")})</span>
               </span>
-              <Link href="/login" className={buttonClass.secondary}>
+              <span aria-hidden className="h-4 w-px bg-zinc-200" />
+              <Link href="/login" className="text-zinc-500 transition-colors hover:text-zinc-900">
                 Switch user
               </Link>
               <form action={logout}>
-                <button type="submit" className="text-slate-500 hover:text-slate-800">
+                <button type="submit" className="text-zinc-500 transition-colors hover:text-zinc-900">
                   Log out
                 </button>
               </form>

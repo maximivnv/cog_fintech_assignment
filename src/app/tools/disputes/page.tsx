@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alert, Money, PageHeader, StatusBadge, Table, can, requireUser } from "@/platform";
+import { Alert, Money, PageHeader, StatusBadge, Table, can, requireUser, filterLinkClass, linkClass } from "@/platform";
 import { DISPUTE_STATUSES, listDisputes, type Dispute, type DisputeStatus } from "@/tools/disputes/queries";
 import { DaysLeft } from "./days-left";
 
@@ -22,7 +22,7 @@ export default async function DisputesPage({ searchParams }: PageProps<"/tools/d
       <Link
         key={label}
         href={value ? `/tools/disputes?status=${value}` : "/tools/disputes"}
-        className={`rounded-md px-2 py-1 text-sm ${active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+        className={filterLinkClass(active)}
       >
         {label}
       </Link>
@@ -35,7 +35,7 @@ export default async function DisputesPage({ searchParams }: PageProps<"/tools/d
         title="Disputes"
         description="Chargebacks from the card networks, soonest response deadline first. Accepting a loss over $500 needs a finance approver."
       />
-      <div className="mb-3 flex flex-wrap gap-1">
+      <div className="mb-4 flex flex-wrap gap-1">
         {filterLink("All")}
         {DISPUTE_STATUSES.map((s) => filterLink(s.replace(/_/g, " "), s))}
       </div>
@@ -47,7 +47,7 @@ export default async function DisputesPage({ searchParams }: PageProps<"/tools/d
           {
             header: "Dispute",
             cell: (d) => (
-              <Link href={`/tools/disputes/${d.id}`} className="font-mono text-slate-900 underline-offset-2 hover:underline">
+              <Link href={`/tools/disputes/${d.id}`} className={`font-mono ${linkClass}`}>
                 {d.id}
               </Link>
             ),
