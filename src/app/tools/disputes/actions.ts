@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { decideApproval, errorMessage, requireUser } from "@/platform";
+import { decideApproval, errorMessage, requireUser, type Decision } from "@/platform";
 import { acceptLoss, addNote, recordOutcome, submitResponse } from "@/tools/disputes/actions";
 
 function text(formData: FormData, name: string): string {
@@ -51,6 +51,7 @@ export async function recordDisputeOutcome(formData: FormData): Promise<void> {
 export async function decideDisputeLoss(formData: FormData): Promise<void> {
   const user = await requireUser();
   const disputeId = text(formData, "disputeId");
-  const decision = text(formData, "decision") === "approve" ? "approve" : "reject";
+  // The decision goes through as-is so decideApproval's schema rejects (and audits) anything but approve/reject.
+  const decision = text(formData, "decision") as Decision;
   await run(disputeId, () => decideApproval(user, text(formData, "approvalId"), decision, text(formData, "reason")));
 }
