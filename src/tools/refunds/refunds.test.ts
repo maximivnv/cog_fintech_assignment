@@ -12,6 +12,7 @@ import {
   listAudit,
   listRefundsForCharge,
   registerTool,
+  type Decision,
 } from "@/platform";
 import { refunds } from "./index";
 import { requestRefund } from "./actions";
@@ -166,6 +167,13 @@ describe("approvals", () => {
     await decideApproval(ben, r.approval_id!, "reject", "No");
     await expect(decideApproval(ben, r.approval_id!, "approve", "Changed my mind")).rejects.toThrow(InvalidStateError);
     expect(getRefund(r.id)!.status).toBe("rejected");
+  });
+
+  it("a decision that is not approve or reject is refused, not coerced", async () => {
+    const r = await pendingRequest(ana);
+    await expect(decideApproval(ben, r.approval_id!, "maybe" as Decision, "Typo")).rejects.toThrow(InvalidInputError);
+    expect(getApproval(r.approval_id!)!.status).toBe("pending");
+    expect(getRefund(r.id)!.status).toBe("pending_approval");
   });
 });
 
