@@ -63,7 +63,7 @@ export default async function DisputesPage({ searchParams }: PageProps<"/tools/d
             cell: (d) => (
               <span className="inline-flex items-center gap-1">
                 <StatusBadge status={d.status} />
-                {d.approval_id ? <StatusBadge status="pending finance" /> : null}
+                {d.status === "needs_response" && d.approval_id ? <StatusBadge status="pending finance" /> : null}
               </span>
             ),
           },

@@ -41,7 +41,7 @@ export const addNote = defineAction({
   permission: "disputes:work",
   input: z.object({
     disputeId: z.string().min(1),
-    body: z.string().trim().min(1, "A note is required").max(2000),
+    body: z.string().trim().min(1, "A note is required").max(1000),
   }),
   handler(ctx, input) {
     const d = loadFor(ctx, input.disputeId);
