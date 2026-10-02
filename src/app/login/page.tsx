@@ -21,8 +21,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
               </div>
               <form action={loginAs}>
                 <input type="hidden" name="uid" value={u.id} />
-                <button type="submit" className={buttonClass.secondary}>
-                  Continue as {u.name}
+                <button type="submit" aria-label={`Log in as ${u.name}`} className={buttonClass.secondary}>
+                  Log in
                 </button>
               </form>
             </li>
