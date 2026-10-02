@@ -17,6 +17,7 @@ export const USERS: readonly User[] = [
   { id: "u_rio", name: "Rio", roles: ["support_agent", "finance_approver"] },
   { id: "u_cara", name: "Cara", roles: ["kyc_analyst"] },
   { id: "u_dev", name: "Dev", roles: ["kyc_analyst", "kyc_lead"] },
+  { id: "u_lee", name: "Lee", roles: ["kyc_lead"] },
   { id: "u_eve", name: "Eve", roles: ["auditor"] },
 ];
 

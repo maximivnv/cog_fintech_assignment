@@ -10,34 +10,39 @@ Requires Node 22 (for `node:sqlite`).
 
 ```sh
 npm install
-npm run dev        # http://localhost:3000, pick a user at /login
+npm run reset      # optional: delete data/app.db for a fresh seed
+npm run dev        # http://localhost:3000 redirects to /login; pick a user
 npm run check      # typecheck + lint + tests; must pass before every PR
-npm run reset      # delete data/app.db; it re-seeds on the next start
 ```
 
 The database is a SQLite file at `data/app.db` (override with `DB_PATH`; tests use `:memory:`). On first open it runs the platform migrations, then each tool's, then seeds. `node:sqlite` prints an `ExperimentalWarning`; ignore it.
 
-## Two-minute click-through
+A fresh database has seeded refunds, KYC cases, disputes and pending approvals, but an empty audit log: audit rows are written by actions, so the log fills up as you click through.
 
-Login is a mock SSO: `/login` lists the seeded users and sets a `uid` cookie. Production would use the company's SSO.
+## Five-minute click-through
+
+Login is a mock SSO: `/login` lists the seeded users and sets a `uid` cookie. Production would use the company's SSO. Switch users with *Switch user* in the header.
 
 | User | Roles | Try this |
 |---|---|---|
-| Ana | support_agent | Request a refund. Under $100 executes immediately; $100.01 to $5,000 goes to approval. |
-| Ben | finance_approver | Open **Approvals**. Ana's request is in *To decide*. Approve or reject it with a reason. |
+| Ana | support_agent | Request a refund. Up to $100 executes immediately; $100.01 to $5,000 goes to approval; over $5,000 is refused. Work a dispute: add evidence notes, submit the response, or accept the loss (over $500 needs finance). |
+| Ben | finance_approver | Open **Approvals**. Ana's refund and loss acceptance are in *To decide*. Approve or reject with a reason. |
 | Rio | support_agent, finance_approver | Request a refund that needs approval, then open **Approvals**: your own request is only under *My requests*. Separation of duties is per request, not per role. |
-| Cara | kyc_analyst | Claim a KYC case and decide it. High-risk cases need a lead. |
-| Dev | kyc_analyst, kyc_lead | Approve a high-risk case Cara recommended. Try to approve one you recommended yourself: refused. |
-| Eve | auditor | Open **Audit log**. Filter by tool. Every action, denial and failure is there, including the refused self-approvals. |
+| Cara | kyc_analyst | Claim a KYC case and decide it. Approving a high-risk case (score ≥ 70 or a watchlist hit) only records a recommendation and asks a lead. |
+| Dev | kyc_analyst, kyc_lead | Sign off Cara's recommendation. Recommend one yourself, then try to sign it off: refused. |
+| Lee | kyc_lead | Sign off the high-risk case Dev recommended, which Dev cannot do himself. |
+| Eve | auditor | Open **Audit log**. Filter by Refunds, KYC review or Disputes. Every action, denial and failure is there, including the refused self-approvals. |
 
 Steps:
 
-1. Log in as **Ana**, open Refunds, request a $250 refund with a reason. Status: `pending_approval`.
-2. Switch user to **Ben** (header, *Switch user*), open **Approvals**, approve it with a reason. The refund executes.
+1. Log in as **Ana**, open **Refunds**, *New request*: pick a charge, enter $250 and a reason. Status: `pending approval`.
+2. Switch to **Ben**, open **Approvals**, approve it with a reason. The refund executes; open it under Refunds to see the processor refund id and the audit trail.
 3. Switch to **Rio**, request another refund over $100, then open **Approvals**. It is in *My requests*, not *To decide*.
-4. Switch to **Eve**, open **Audit log**, filter by Refunds. Expand a row's detail to see the input and before/after state.
-
-Tools that are not merged yet simply don't appear in the header; the platform pages work regardless.
+4. Switch to **Ana**, open **Disputes**, open `dp_seed_1` ($7,500): *Add note*, then *Accept loss (needs finance)* with a reason. The dispute stays `needs response` with a *pending finance* badge until Ben decides it on **Approvals**.
+5. Switch to **Cara**, open **KYC review**, claim `kyc_seed_08` (score 92, watchlist hit) and approve it with a reason. Status: `pending lead review`.
+6. Switch to **Dev**, open **Approvals**, sign off Cara's case. Then claim `kyc_seed_06` (score 83) and approve it: it goes to `pending lead review`, and Dev's own **Approvals** page does not list it under *To decide*.
+7. Switch to **Lee**, open **Approvals**, sign off Dev's case.
+8. Switch to **Eve**, open **Audit log**, filter by each tool. Expand a row's *view* to see the input and before/after state.
 
 ## Architecture
 
@@ -103,11 +108,16 @@ The guardrail tests in `tests/guardrails.test.ts` pick up new tools automaticall
 
 Rules (from `AGENTS.md`): writes only inside `defineAction` or approval handlers; permissions checked on the server; money movement and compliance decisions above a threshold go through `requestApproval`, and the requester can't decide; audit rows are never updated or deleted; PII is masked by default and revealing it is an audited action; money is integer cents.
 
-## Mocked or out of scope
+## Known limitations
 
-- **Login** is a mock SSO (pick a user, get a cookie). No passwords, no sessions table.
-- **Payments** are a mock: a seeded `charges` table and `refund()` that records rows. No real processor.
-- **Database** is a local SQLite file. No Postgres, no hosting, no backups.
+- **Mock login.** `/login` picks a seeded user and sets a `uid` cookie. No passwords, no sessions, no SSO.
+- **SQLite file.** One local `data/app.db`, single process. No Postgres, no hosting, no backups.
+- **Mocked payments.** `charges` and `payment_refunds` are seeded tables; `refund()` records a row. No real processor.
+- **200-row audit query cap.** `/audit` shows the latest 200 rows for the chosen filter; there is no paging or date range, so older rows are only reachable through the database.
+- **Seeds are not retried after a crash.** Migrations and seeds run on first open; a migration is marked applied before its seed runs, so a crash during seeding leaves empty tables that are not re-seeded on the next start. Run `npm run reset` and start again.
+
+## Out of scope
+
 - **No notifications**: approvers find work on `/approvals`.
 - **Not building a feature-flag admin**: products like Unleash already ship approvals and audit for flags.
 - Seed data is fake.

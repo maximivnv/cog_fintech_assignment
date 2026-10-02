@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { decideApproval, errorMessage, parseDollarsToCents, requireUser } from "@/platform";
+import { decideApproval, errorMessage, parseDollarsToCents, requireUser, type Decision } from "@/platform";
 import { requestRefund } from "@/tools/refunds/actions";
 
 function text(formData: FormData, name: string): string {
@@ -34,7 +34,8 @@ export async function decideRefund(formData: FormData): Promise<void> {
   const user = await requireUser();
   const refundId = text(formData, "refundId");
   const approvalId = text(formData, "approvalId");
-  const decision = text(formData, "decision") === "approve" ? "approve" : "reject";
+  // The decision goes through as-is so decideApproval's schema rejects (and audits) anything but approve/reject.
+  const decision = text(formData, "decision") as Decision;
 
   let error: string | null = null;
   try {

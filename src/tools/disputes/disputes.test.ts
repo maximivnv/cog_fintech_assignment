@@ -11,6 +11,7 @@ import {
   listApprovals,
   listAudit,
   registerTool,
+  type Decision,
 } from "@/platform";
 import { disputes } from "./index";
 import { acceptLoss, addNote, recordOutcome, submitResponse } from "./actions";
@@ -207,6 +208,13 @@ describe("accept loss", () => {
     const d = await pendingAccept();
     await decideApproval(ben, d.approval_id!, "reject", "No");
     await expect(decideApproval(ben, d.approval_id!, "approve", "Changed my mind")).rejects.toThrow(InvalidStateError);
+    expect(getDispute(BIG)!.status).toBe("needs_response");
+  });
+
+  it("a decision that is not approve or reject is refused, not coerced", async () => {
+    const d = await pendingAccept();
+    await expect(decideApproval(ben, d.approval_id!, "maybe" as Decision, "Typo")).rejects.toThrow(InvalidInputError);
+    expect(getApproval(d.approval_id!)!.status).toBe("pending");
     expect(getDispute(BIG)!.status).toBe("needs_response");
   });
 });

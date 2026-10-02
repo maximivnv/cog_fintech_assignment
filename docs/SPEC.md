@@ -18,6 +18,7 @@ Rules for all code are in `AGENTS.md`.
 | u_rio | Rio | support_agent, finance_approver |
 | u_cara | Cara | kyc_analyst |
 | u_dev | Dev | kyc_analyst, kyc_lead |
+| u_lee | Lee | kyc_lead |
 | u_eve | Eve | auditor |
 
 Rio and Dev hold both roles on purpose. They show that separation of duties is per request, not per role.
