@@ -6,7 +6,7 @@ Built with Devin cloud sessions in 2 hours. Each session is small, names the fil
 1. Push this kit to the repo.
 2. GitHub > Settings > Applications > Devin.ai > Configure: give it access to the repo.
 3. Devin > Settings > Environment > Blueprints: find the repo, Sync, Build snapshot. Wait for "Success".
-4. Devin settings: "Open PRs as" = Devin. Devin Review trigger = "On PR creation". Turn on "Pre-approve testing". Data Controls: opt out of training.
+4. Devin settings: "Open PRs as" = Devin. Devin Review trigger = "On PR creation". Data Controls: opt out of training.
 5. Open a GitHub issue "Disputes queue" with the S5 request below. Note its number.
 6. Smoke test in Ask mode: "Read AGENTS.md and docs/SPEC.md. In 5 bullets, what would you build first? Don't write code."
 
@@ -45,9 +45,7 @@ Done when npm run check passes. Open a PR.
 **S2 Refunds**
 ```
 Build the Refunds tool in docs/SPEC.md. Every other tool will copy it, so keep it simple.
-Done when npm run check passes. Then run the app and record this: Ana requests a $250 refund and
-can't approve it, Rio can't approve his own $300 request, Ben approves Ana's and it executes.
-Open a PR.
+Done when npm run check passes. Open a PR.
 ```
 
 **S3 Pages, guardrails, README**

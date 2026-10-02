@@ -27,4 +27,4 @@ A tool PR only touches its own folders, `src/tools/index.ts` and seed data. If i
 ## Pull requests
 - `npm run check` passes.
 - Fill in the PR template.
-- For UI changes, run the app, walk the main flow as the seeded users, and attach a recording.
+- Don't click through the UI or record anything. A human does manual testing and demos.
