@@ -31,12 +31,12 @@ function prettyDetail(json: string): string {
 }
 
 const columns: Column<AuditRow>[] = [
-  { header: "#", cell: (r) => <span className="font-mono text-xs text-zinc-500">{r.id}</span> },
+  { header: "#", cell: (r) => <span className="tabular-nums text-zinc-500">{r.id}</span> },
   { header: "When", cell: (r) => <span className="whitespace-nowrap">{when(r.ts)}</span> },
   { header: "Actor", cell: (r) => findUser(r.actor_id)?.name ?? r.actor_id },
   { header: "Tool", cell: (r) => getTool(r.tool)?.manifest.name ?? r.tool },
-  { header: "Action", cell: (r) => <span className="font-mono text-xs">{r.action}</span> },
-  { header: "Entity", cell: (r) => <span className="font-mono text-xs">{r.entity_id ?? "—"}</span> },
+  { header: "Action", cell: (r) => <span>{r.action}</span> },
+  { header: "Entity", cell: (r) => <span className="text-zinc-600">{r.entity_id ?? "—"}</span> },
   { header: "Outcome", cell: (r) => <StatusBadge status={r.outcome} /> },
   {
     header: "Detail",

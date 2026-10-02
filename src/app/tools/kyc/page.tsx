@@ -58,20 +58,20 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
           {
             header: "Case",
             cell: (c) => (
-              <Link href={`/tools/kyc/${c.id}`} className={`font-mono ${linkClass}`}>
+              <Link href={`/tools/kyc/${c.id}`} className={linkClass}>
                 {c.id}
               </Link>
             ),
           },
           { header: "Applicant", cell: (c) => c.applicant_name },
-          { header: "Country", cell: (c) => <span className="font-mono">{c.country}</span> },
+          { header: "Country", cell: (c) => <span>{c.country}</span> },
           { header: "Date of birth", cell: (c) => <MaskedValue value={c.date_of_birth} /> },
           { header: "Document", cell: (c) => <MaskedValue value={c.document_number} /> },
           {
             header: "Risk",
             align: "right",
             cell: (c) => (
-              <span className={`whitespace-nowrap font-mono ${c.high_risk ? "font-semibold text-red-700" : ""}`}>
+              <span className={`whitespace-nowrap tabular-nums ${c.high_risk ? "font-semibold text-red-700" : ""}`}>
                 {c.risk_score}
                 {c.watchlist_hit ? <span title="Watchlist hit"> ⚑</span> : null}
               </span>

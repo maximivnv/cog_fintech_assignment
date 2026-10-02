@@ -47,12 +47,12 @@ export default async function DisputesPage({ searchParams }: PageProps<"/tools/d
           {
             header: "Dispute",
             cell: (d) => (
-              <Link href={`/tools/disputes/${d.id}`} className={`font-mono ${linkClass}`}>
+              <Link href={`/tools/disputes/${d.id}`} className={linkClass}>
                 {d.id}
               </Link>
             ),
           },
-          { header: "Charge", cell: (d) => <span className="font-mono">{d.charge_id}</span> },
+          { header: "Charge", cell: (d) => <span className="text-zinc-600">{d.charge_id}</span> },
           { header: "Customer", cell: (d) => d.customer },
           { header: "Amount", align: "right", cell: (d) => <Money cents={d.amount_cents} /> },
           { header: "Reason", cell: (d) => <StatusBadge status={d.reason} tone="neutral" /> },

@@ -68,7 +68,7 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
           <DescriptionList
             items={[
               ["Name", c.applicant_name],
-              ["Country", <span key="cc" className="font-mono">{c.country}</span>],
+              ["Country", <span key="cc">{c.country}</span>],
               ["Date of birth", <MaskedValue key="dob" value={c.date_of_birth} revealed={c.pii_revealed} />],
               ["Document number", <MaskedValue key="doc" value={c.document_number} revealed={c.pii_revealed} />],
               ["Risk score", `${c.risk_score} / 100${c.risk_score >= HIGH_RISK_SCORE ? " (high)" : ""}`],
@@ -172,7 +172,7 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
         columns={[
           { header: "When", cell: (a) => when(a.ts) },
           { header: "Who", cell: (a) => name(a.actor_id) },
-          { header: "Action", cell: (a) => <span className="font-mono">{a.action}</span> },
+          { header: "Action", cell: (a) => <span>{a.action}</span> },
           { header: "Outcome", cell: (a) => <StatusBadge status={a.outcome} /> },
           {
             header: "Detail",
