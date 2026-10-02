@@ -3,7 +3,6 @@ import { getCurrentUser } from "../auth";
 import { logout } from "../auth-actions";
 import { toolsFor } from "../registry";
 import { NavLink } from "./nav-link";
-import { buttonClass } from "./primitives";
 
 export async function Header() {
   const user = await getCurrentUser();
@@ -42,11 +41,7 @@ export async function Header() {
                 </button>
               </form>
             </>
-          ) : (
-            <Link href="/login" className={buttonClass.primary}>
-              Log in
-            </Link>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
