@@ -19,15 +19,15 @@ export function Table<T>({
   empty?: ReactNode;
 }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-50">
-          <tr>
+    <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
+      <table className="min-w-full text-sm">
+        <thead>
+          <tr className="border-b border-zinc-200">
             {columns.map((c) => (
               <th
                 key={c.header}
                 scope="col"
-                className={`px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 ${
+                className={`h-9 whitespace-nowrap px-4 text-xs font-medium text-zinc-500 ${
                   c.align === "right" ? "text-right" : "text-left"
                 } ${c.className ?? ""}`}
               >
@@ -36,20 +36,20 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-zinc-100">
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-3 py-6 text-center text-slate-500">
+              <td colSpan={columns.length} className="px-4 py-10 text-center text-sm text-zinc-500">
                 {empty}
               </td>
             </tr>
           ) : (
             rows.map((row) => (
-              <tr key={rowKey(row)} className="hover:bg-slate-50">
+              <tr key={rowKey(row)} className="transition-colors hover:bg-zinc-50">
                 {columns.map((c) => (
                   <td
                     key={c.header}
-                    className={`px-3 py-2 align-top text-slate-800 ${
+                    className={`px-4 py-2.5 align-middle text-zinc-800 ${
                       c.align === "right" ? "text-right tabular-nums" : "text-left"
                     } ${c.className ?? ""}`}
                   >

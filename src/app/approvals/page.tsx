@@ -11,6 +11,8 @@ import {
   requireUser,
   type Approval,
   type Column,
+  SectionLabel,
+  linkClass,
 } from "@/platform";
 import { DecisionForm } from "./decision-form";
 
@@ -28,10 +30,10 @@ function when(iso: string | null): string {
 }
 
 const requestColumns: Column<Approval>[] = [
-  { header: "Tool", cell: (a) => <Link href={`/tools/${a.tool}`} className="underline-offset-2 hover:underline">{toolName(a.tool)}</Link> },
-  { header: "Request", cell: (a) => <span>{a.summary}<span className="ml-2 font-mono text-xs text-slate-500">{a.entity_id}</span></span> },
+  { header: "Tool", cell: (a) => <Link href={`/tools/${a.tool}`} className={linkClass}>{toolName(a.tool)}</Link> },
+  { header: "Request", cell: (a) => <span>{a.summary}<span className="ml-2 font-mono text-xs text-zinc-500">{a.entity_id}</span></span> },
   { header: "Requested by", cell: (a) => userName(a.requested_by) },
-  { header: "Requested", cell: (a) => when(a.created_at) },
+  { header: "Requested", className: "whitespace-nowrap", cell: (a) => when(a.created_at) },
 ];
 
 export default async function ApprovalsPage({ searchParams }: PageProps<"/approvals">) {
@@ -51,7 +53,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
     { header: "Status", cell: (a) => <StatusBadge status={a.status} /> },
     { header: "Decided by", cell: (a) => userName(a.decided_by) },
     { header: "Reason", cell: (a) => a.reason ?? "—" },
-    { header: "Requested", cell: (a) => when(a.created_at) },
+    { header: "Requested", className: "whitespace-nowrap", cell: (a) => when(a.created_at) },
   ];
 
   return (
@@ -63,17 +65,17 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
       {typeof error === "string" ? <div className="mb-4"><Alert tone="error">{error}</Alert></div> : null}
       {typeof ok === "string" ? <div className="mb-4"><Alert tone="success">{ok}</Alert></div> : null}
 
-      <section className="mb-8">
-        <h2 className="mb-2 text-base font-semibold text-slate-900">
-          To decide <span className="ml-1 text-sm font-normal text-slate-500">({toDecide.length})</span>
-        </h2>
+      <section className="mb-10">
+        <SectionLabel>
+          To decide <span className="ml-1 tabular-nums text-zinc-400">({toDecide.length})</span>
+        </SectionLabel>
         <Table rows={toDecide} columns={decideColumns} rowKey={(a) => a.id} empty="Nothing waiting on you." />
       </section>
 
       <section>
-        <h2 className="mb-2 text-base font-semibold text-slate-900">
-          My requests <span className="ml-1 text-sm font-normal text-slate-500">({mine.length})</span>
-        </h2>
+        <SectionLabel>
+          My requests <span className="ml-1 tabular-nums text-zinc-400">({mine.length})</span>
+        </SectionLabel>
         <Table rows={mine} columns={mineColumns} rowKey={(a) => a.id} empty="You have not requested anything yet." />
       </section>
     </>

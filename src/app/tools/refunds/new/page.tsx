@@ -1,10 +1,7 @@
 import Link from "next/link";
-import { Alert, Card, PageHeader, buttonClass, can, formatCents, requireUser } from "@/platform";
+import { Alert, Card, PageHeader, buttonClass, can, formatCents, requireUser, inputClass, textareaClass } from "@/platform";
 import { listChargesWithRemaining } from "@/tools/refunds/queries";
 import { submitRefundRequest } from "../actions";
-
-const inputClass =
-  "w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none";
 
 export default async function NewRefundPage({ searchParams }: PageProps<"/tools/refunds/new">) {
   const user = await requireUser();
@@ -33,9 +30,9 @@ export default async function NewRefundPage({ searchParams }: PageProps<"/tools/
         </div>
       ) : null}
       <Card>
-        <form action={submitRefundRequest} className="flex flex-col gap-4">
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium text-slate-700">Charge</span>
+        <form action={submitRefundRequest} className="flex flex-col gap-5">
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-zinc-700">Charge</span>
             <select name="chargeId" required defaultValue={str(sp.chargeId)} className={inputClass}>
               <option value="" disabled>
                 Choose a charge
@@ -47,13 +44,13 @@ export default async function NewRefundPage({ searchParams }: PageProps<"/tools/
               ))}
             </select>
           </label>
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium text-slate-700">Amount (USD)</span>
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-zinc-700">Amount (USD)</span>
             <input name="amount" type="text" inputMode="decimal" required placeholder="0.00" defaultValue={str(sp.amount)} className={inputClass} />
           </label>
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium text-slate-700">Reason</span>
-            <textarea name="reason" required rows={3} maxLength={1000} defaultValue={str(sp.reason)} className={inputClass} />
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-zinc-700">Reason</span>
+            <textarea name="reason" required rows={3} maxLength={1000} defaultValue={str(sp.reason)} className={textareaClass} />
           </label>
           <div>
             <button type="submit" className={buttonClass.primary}>

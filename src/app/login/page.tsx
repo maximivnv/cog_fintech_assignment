@@ -9,15 +9,15 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       <PageHeader title="Log in" description="Mock login. Production uses the company's SSO." />
       {error ? <div className="mb-4"><Alert tone="error">That user does not exist.</Alert></div> : null}
       <Card>
-        <ul className="divide-y divide-slate-100">
+        <ul className="divide-y divide-zinc-100">
           {USERS.map((u) => (
             <li key={u.id} className="flex items-center justify-between gap-4 py-3">
               <div>
-                <div className="font-medium text-slate-900">
+                <div className="font-medium text-zinc-900">
                   {u.name}
-                  {current?.id === u.id ? <span className="ml-2 text-xs text-slate-500">(current)</span> : null}
+                  {current?.id === u.id ? <span className="ml-2 text-xs text-zinc-500">(current)</span> : null}
                 </div>
-                <div className="text-sm text-slate-500">{u.roles.join(", ")}</div>
+                <div className="text-sm text-zinc-500">{u.roles.join(", ")}</div>
               </div>
               <form action={loginAs}>
                 <input type="hidden" name="uid" value={u.id} />

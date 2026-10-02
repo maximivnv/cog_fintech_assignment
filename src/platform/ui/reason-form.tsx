@@ -1,4 +1,4 @@
-import { buttonClass, type ButtonTone } from "./primitives";
+import { buttonClass, textareaClass, type ButtonTone } from "./primitives";
 
 /**
  * A form with a required reason and a submit button. `action` is a server function that reads
@@ -31,7 +31,7 @@ export function ReasonForm({
         maxLength={1000}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none disabled:bg-slate-50"
+        className={textareaClass}
       />
       <div>
         <button type="submit" disabled={disabled} className={buttonClass[tone]}>

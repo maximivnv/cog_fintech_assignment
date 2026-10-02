@@ -16,6 +16,7 @@ import {
   listAudit,
   requireUser,
   type AuditRow,
+  SectionLabel,
 } from "@/platform";
 import { getRefundDetail } from "@/tools/refunds/queries";
 import { decideRefund } from "../actions";
@@ -80,10 +81,10 @@ export default async function RefundDetailPage({ params, searchParams }: PagePro
               ]}
             />
           ) : (
-            <p className="text-sm text-slate-600">Within the auto-approve limit; executed immediately.</p>
+            <p className="text-sm text-zinc-600">Within the auto-approve limit; executed immediately.</p>
           )}
           {approval?.status === "pending" ? (
-            <div className="mt-4 border-t border-slate-100 pt-4">
+            <div className="mt-4 border-t border-zinc-100 pt-4">
               {decidable ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <ReasonForm
@@ -111,7 +112,7 @@ export default async function RefundDetailPage({ params, searchParams }: PagePro
           ) : null}
         </Card>
       </div>
-      <h2 className="mb-2 mt-8 text-sm font-semibold uppercase tracking-wide text-slate-500">Audit trail</h2>
+      <SectionLabel className="mt-10">Audit trail</SectionLabel>
       <Table<AuditRow>
         rows={trail}
         rowKey={(a) => a.id}
@@ -123,7 +124,7 @@ export default async function RefundDetailPage({ params, searchParams }: PagePro
           { header: "Outcome", cell: (a) => <StatusBadge status={a.outcome} /> },
           {
             header: "Detail",
-            cell: (a) => <code className="block max-w-xl truncate text-xs text-slate-600" title={a.detail_json}>{a.detail_json}</code>,
+            cell: (a) => <code className="block max-w-xl truncate text-xs text-zinc-600" title={a.detail_json}>{a.detail_json}</code>,
           },
         ]}
       />

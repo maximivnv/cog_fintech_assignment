@@ -16,6 +16,8 @@ import {
   listAudit,
   requireUser,
   type AuditRow,
+  SectionLabel,
+  linkClass,
 } from "@/platform";
 import { HIGH_RISK_SCORE, manifest } from "@/tools/kyc/manifest";
 import { getCaseDetail } from "@/tools/kyc/queries";
@@ -75,13 +77,13 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
             ]}
           />
           {c.pii_revealed ? (
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-zinc-500">
               PII revealed to you for {manifest.thresholds.revealWindowMinutes} minutes. The reveal is in the audit trail below.
             </p>
           ) : null}
           {canReveal ? (
             <details className="mt-3">
-              <summary className="cursor-pointer text-sm text-slate-700 underline-offset-2 hover:underline">
+              <summary className={`cursor-pointer text-sm ${linkClass}`}>
                 Reveal date of birth and document number
               </summary>
               <div className="mt-2 max-w-sm">
@@ -101,7 +103,7 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
               ["Decision reason", c.decision_reason ?? "—"],
             ]}
           />
-          <div className="mt-4 border-t border-slate-100 pt-4">
+          <div className="mt-4 border-t border-zinc-100 pt-4">
             {c.status === "open" ? (
               canDecideCase ? (
                 <form action={claimKycCase}>
@@ -155,14 +157,14 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
               )
             ) : null}
             {c.status === "approved" || c.status === "rejected" ? (
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-zinc-600">
                 Final. {approval ? `Lead decision: ${approval.status} by ${name(approval.decided_by)}.` : "Decided by the assignee."}
               </p>
             ) : null}
           </div>
         </Card>
       </div>
-      <h2 className="mb-2 mt-8 text-sm font-semibold uppercase tracking-wide text-slate-500">Audit trail</h2>
+      <SectionLabel className="mt-10">Audit trail</SectionLabel>
       <Table<AuditRow>
         rows={trail}
         rowKey={(a) => a.id}
@@ -174,7 +176,7 @@ export default async function KycCasePage({ params, searchParams }: PageProps<"/
           { header: "Outcome", cell: (a) => <StatusBadge status={a.outcome} /> },
           {
             header: "Detail",
-            cell: (a) => <code className="block max-w-xl truncate text-xs text-slate-600" title={a.detail_json}>{a.detail_json}</code>,
+            cell: (a) => <code className="block max-w-xl truncate text-xs text-zinc-600" title={a.detail_json}>{a.detail_json}</code>,
           },
         ]}
       />

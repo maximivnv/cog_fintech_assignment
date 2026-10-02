@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alert, Money, PageHeader, StatusBadge, Table, buttonClass, can, findUser, requireUser } from "@/platform";
+import { Alert, Money, PageHeader, StatusBadge, Table, buttonClass, can, findUser, requireUser, filterLinkClass, linkClass } from "@/platform";
 import { REFUND_STATUSES, listRefunds, type Refund, type RefundStatus } from "@/tools/refunds/queries";
 
 function isStatus(s: string | undefined): s is RefundStatus {
@@ -21,7 +21,7 @@ export default async function RefundsPage({ searchParams }: PageProps<"/tools/re
       <Link
         key={label}
         href={value ? `/tools/refunds?status=${value}` : "/tools/refunds"}
-        className={`rounded-md px-2 py-1 text-sm ${active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+        className={filterLinkClass(active)}
       >
         {label}
       </Link>
@@ -41,7 +41,7 @@ export default async function RefundsPage({ searchParams }: PageProps<"/tools/re
           ) : null
         }
       />
-      <div className="mb-3 flex flex-wrap gap-1">
+      <div className="mb-4 flex flex-wrap gap-1">
         {filterLink("All")}
         {REFUND_STATUSES.map((s) => filterLink(s.replace(/_/g, " "), s))}
       </div>
@@ -53,7 +53,7 @@ export default async function RefundsPage({ searchParams }: PageProps<"/tools/re
           {
             header: "Refund",
             cell: (r) => (
-              <Link href={`/tools/refunds/${r.id}`} className="font-mono text-slate-900 underline-offset-2 hover:underline">
+              <Link href={`/tools/refunds/${r.id}`} className={`font-mono ${linkClass}`}>
                 {r.id}
               </Link>
             ),
@@ -62,8 +62,8 @@ export default async function RefundsPage({ searchParams }: PageProps<"/tools/re
           { header: "Amount", align: "right", cell: (r) => <Money cents={r.amount_cents} /> },
           { header: "Status", cell: (r) => <StatusBadge status={r.status} /> },
           { header: "Requested by", cell: (r) => findUser(r.requested_by)?.name ?? r.requested_by },
-          { header: "Reason", cell: (r) => <span className="text-slate-600">{r.reason}</span> },
-          { header: "Created", cell: (r) => new Date(r.created_at).toLocaleString("en-US", { timeZone: "UTC" }) },
+          { header: "Reason", cell: (r) => <span className="text-zinc-600">{r.reason}</span> },
+          { header: "Created", className: "whitespace-nowrap", cell: (r) => new Date(r.created_at).toLocaleString("en-US", { timeZone: "UTC" }) },
         ]}
       />
     </>

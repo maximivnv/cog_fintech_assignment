@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alert, MaskedValue, PageHeader, StatusBadge, Table, can, findUser, requireUser } from "@/platform";
+import { Alert, MaskedValue, PageHeader, StatusBadge, Table, can, findUser, requireUser, filterLinkClass, linkClass } from "@/platform";
 import { HIGH_RISK_SCORE } from "@/tools/kyc/manifest";
 import { KYC_STATUSES, listCases, type KycCase, type KycStatus } from "@/tools/kyc/queries";
 
@@ -28,7 +28,7 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
     <Link
       key={label}
       href={to}
-      className={`rounded-md px-2 py-1 text-sm ${active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+      className={filterLinkClass(active)}
     >
       {label}
     </Link>
@@ -40,12 +40,12 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
         title="KYC review"
         description={`Highest risk first. Score ≥ ${HIGH_RISK_SCORE} or a watchlist hit is high risk: approving it needs a KYC lead. Claim a case to decide it.`}
       />
-      <div className="mb-3 flex flex-wrap items-center gap-1">
+      <div className="mb-4 flex flex-wrap items-center gap-1">
         {chip("All", href(undefined), filter === undefined)}
         {KYC_STATUSES.map((s) => chip(s.replace(/_/g, " "), href(s), s === filter))}
         {can(user, "kyc:decide") ? (
           <>
-            <span className="mx-2 h-4 border-l border-slate-200" />
+            <span className="mx-2 h-4 border-l border-zinc-200" />
             {chip("Assigned to me", href(filter, !onlyMine), onlyMine)}
           </>
         ) : null}
@@ -58,7 +58,7 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
           {
             header: "Case",
             cell: (c) => (
-              <Link href={`/tools/kyc/${c.id}`} className="font-mono text-slate-900 underline-offset-2 hover:underline">
+              <Link href={`/tools/kyc/${c.id}`} className={`font-mono ${linkClass}`}>
                 {c.id}
               </Link>
             ),
@@ -71,7 +71,7 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
             header: "Risk",
             align: "right",
             cell: (c) => (
-              <span className={`font-mono ${c.high_risk ? "font-semibold text-red-700" : ""}`}>
+              <span className={`whitespace-nowrap font-mono ${c.high_risk ? "font-semibold text-red-700" : ""}`}>
                 {c.risk_score}
                 {c.watchlist_hit ? <span title="Watchlist hit"> ⚑</span> : null}
               </span>
@@ -79,7 +79,7 @@ export default async function KycQueuePage({ searchParams }: PageProps<"/tools/k
           },
           { header: "Status", cell: (c) => <StatusBadge status={c.status} /> },
           { header: "Assignee", cell: (c) => (c.assignee_id ? findUser(c.assignee_id)?.name ?? c.assignee_id : "—") },
-          { header: "Created", cell: (c) => new Date(c.created_at).toLocaleString("en-US", { timeZone: "UTC" }) },
+          { header: "Created", className: "whitespace-nowrap", cell: (c) => new Date(c.created_at).toLocaleString("en-US", { timeZone: "UTC" }) },
         ]}
       />
     </>
