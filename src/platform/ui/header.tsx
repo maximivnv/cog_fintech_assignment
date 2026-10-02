@@ -3,7 +3,6 @@ import { getCurrentUser } from "../auth";
 import { logout } from "../auth-actions";
 import { toolsFor } from "../registry";
 import { NavLink } from "./nav-link";
-import { buttonClass } from "./primitives";
 
 export async function Header() {
   const user = await getCurrentUser();
@@ -16,7 +15,7 @@ export async function Header() {
         <Link href="/" className="shrink-0 text-sm font-semibold tracking-tight text-zinc-900">
           Internal Tools
         </Link>
-        <nav aria-label="Tools" className="order-last flex h-10 w-full items-center gap-6 overflow-x-auto md:order-none md:h-full md:w-auto">
+        <nav aria-label="Tools" className="order-last -ml-3 flex h-12 w-full items-center gap-1 overflow-x-auto md:order-none md:ml-0 md:h-full md:w-auto">
           {tools.map((t) => (
             <NavLink key={t.manifest.slug} href={`/tools/${t.manifest.slug}`}>
               {t.manifest.name}
@@ -42,11 +41,7 @@ export async function Header() {
                 </button>
               </form>
             </>
-          ) : (
-            <Link href="/login" className={buttonClass.primary}>
-              Log in
-            </Link>
-          )}
+          ) : null}
         </div>
       </div>
     </header>

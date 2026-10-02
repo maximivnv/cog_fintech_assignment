@@ -18,7 +18,7 @@ export function MaskedValue({
 }) {
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap">
-      <span className={`font-mono ${revealed ? "text-zinc-900" : "text-zinc-500"}`} title={revealed ? undefined : "Masked"}>
+      <span className={`tabular-nums ${revealed ? "text-zinc-900" : "text-zinc-500"}`} title={revealed ? undefined : "Masked"}>
         {revealed ? value : mask(value, visible)}
       </span>
       {revealed ? null : children}

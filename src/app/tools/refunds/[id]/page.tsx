@@ -120,7 +120,7 @@ export default async function RefundDetailPage({ params, searchParams }: PagePro
         columns={[
           { header: "When", cell: (a) => when(a.ts) },
           { header: "Who", cell: (a) => name(a.actor_id) },
-          { header: "Action", cell: (a) => <span className="font-mono">{a.action}</span> },
+          { header: "Action", cell: (a) => <span>{a.action}</span> },
           { header: "Outcome", cell: (a) => <StatusBadge status={a.outcome} /> },
           {
             header: "Detail",

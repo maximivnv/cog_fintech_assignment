@@ -21,7 +21,7 @@ export const inputClass = `${fieldBase} h-8`;
 export const textareaClass = `${fieldBase} resize-y py-1.5 leading-5`;
 
 /** Inline text links. */
-export const linkClass = "text-accent underline-offset-2 hover:underline";
+export const linkClass = "font-medium text-accent transition-colors hover:text-accent-hover";
 
 /** Quiet segmented filter links above a table. */
 export function filterLinkClass(active: boolean): string {
@@ -52,7 +52,7 @@ export function PageHeader({
 
 /** Small muted label above a section, table or card body. */
 export function SectionLabel({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <h2 className={`mb-3 text-xs font-medium uppercase tracking-wider text-zinc-500 ${className}`}>{children}</h2>;
+  return <h2 className={`mb-3 text-[13px] font-medium text-zinc-500 ${className}`}>{children}</h2>;
 }
 
 export function Card({ title, children, className = "" }: { title?: string; children: ReactNode; className?: string }) {

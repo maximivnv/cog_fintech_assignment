@@ -31,7 +31,7 @@ function when(iso: string | null): string {
 
 const requestColumns: Column<Approval>[] = [
   { header: "Tool", cell: (a) => <Link href={`/tools/${a.tool}`} className={linkClass}>{toolName(a.tool)}</Link> },
-  { header: "Request", cell: (a) => <span>{a.summary}<span className="ml-2 font-mono text-xs text-zinc-500">{a.entity_id}</span></span> },
+  { header: "Request", cell: (a) => <span>{a.summary}<span className="ml-2 text-xs text-zinc-500">{a.entity_id}</span></span> },
   { header: "Requested by", cell: (a) => userName(a.requested_by) },
   { header: "Requested", className: "whitespace-nowrap", cell: (a) => when(a.created_at) },
 ];

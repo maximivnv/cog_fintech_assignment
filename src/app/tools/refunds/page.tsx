@@ -53,12 +53,12 @@ export default async function RefundsPage({ searchParams }: PageProps<"/tools/re
           {
             header: "Refund",
             cell: (r) => (
-              <Link href={`/tools/refunds/${r.id}`} className={`font-mono ${linkClass}`}>
+              <Link href={`/tools/refunds/${r.id}`} className={linkClass}>
                 {r.id}
               </Link>
             ),
           },
-          { header: "Charge", cell: (r) => <span className="font-mono">{r.charge_id}</span> },
+          { header: "Charge", cell: (r) => <span className="text-zinc-600">{r.charge_id}</span> },
           { header: "Amount", align: "right", cell: (r) => <Money cents={r.amount_cents} /> },
           { header: "Status", cell: (r) => <StatusBadge status={r.status} /> },
           { header: "Requested by", cell: (r) => findUser(r.requested_by)?.name ?? r.requested_by },
