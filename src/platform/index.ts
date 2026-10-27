@@ -24,7 +24,7 @@ export {
   type ToolModule,
 } from "./registry";
 export { getDb, closeDb, tx, inTx, dbPath } from "./db";
-export { writeAudit, listAudit, listAuditTools, type AuditRow, type AuditEntry, type AuditOutcome, type AuditFilter } from "./audit";
+export { AUDIT_LIMIT, writeAudit, listAudit, listAuditTools, type AuditRow, type AuditEntry, type AuditOutcome, type AuditFilter } from "./audit";
 export {
   defineAction,
   actionRegistry,

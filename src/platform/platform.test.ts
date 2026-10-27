@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import {
+  AUDIT_LIMIT,
   InvalidInputError,
   InvalidStateError,
   PermissionDeniedError,
@@ -18,6 +19,7 @@ import {
   refund,
   registerTool,
   tx,
+  writeAudit,
   type ApprovalKind,
   type ToolModule,
   type User,
@@ -151,6 +153,42 @@ describe("audit log", () => {
     expect(listAudit({ tool: "widgets" })).toHaveLength(2);
     expect(listAudit({ tool: "other" })).toHaveLength(0);
     expect(listAudit({ entityId: "w_2" }).map((r) => r.entity_id)).toEqual(["w_2"]);
+  });
+
+  it("caps rows at AUDIT_LIMIT by default and honours an explicit limit", () => {
+    tx((db) => {
+      for (let i = 0; i < AUDIT_LIMIT + 5; i++) {
+        writeAudit({ actorId: ana.id, tool: "widgets", action: "noop", outcome: "ok" }, db);
+      }
+    });
+    expect(listAudit()).toHaveLength(AUDIT_LIMIT);
+    expect(listAudit({ limit: 3 }).map((r) => r.id)).toEqual([AUDIT_LIMIT + 5, AUDIT_LIMIT + 4, AUDIT_LIMIT + 3]);
+    expect(listAudit({ limit: AUDIT_LIMIT + 10 })).toHaveLength(AUDIT_LIMIT + 5);
+  });
+});
+
+describe("AUDIT_LIMIT", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  async function limitWith(value: string | undefined): Promise<number> {
+    vi.stubEnv("AUDIT_LIMIT", value);
+    vi.resetModules();
+    return (await import("./audit")).AUDIT_LIMIT;
+  }
+
+  it("defaults to 200", async () => {
+    expect(await limitWith(undefined)).toBe(200);
+  });
+
+  it("reads a positive integer from the environment", async () => {
+    expect(await limitWith("50")).toBe(50);
+  });
+
+  it.each(["", "abc", "0", "-5"])("falls back to 200 for %j", async (value) => {
+    expect(await limitWith(value)).toBe(200);
   });
 });
 

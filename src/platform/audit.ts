@@ -43,6 +43,16 @@ export function writeAudit(entry: AuditEntry, db: Db = getDb()): number {
   return Number(result.lastInsertRowid);
 }
 
+const DEFAULT_AUDIT_LIMIT = 200;
+
+function parseAuditLimit(raw: string | undefined): number {
+  const n = Number.parseInt(raw ?? "", 10);
+  return Number.isNaN(n) || n <= 0 ? DEFAULT_AUDIT_LIMIT : n;
+}
+
+/** Default row cap for `listAudit`. Override with `AUDIT_LIMIT`. */
+export const AUDIT_LIMIT = parseAuditLimit(process.env.AUDIT_LIMIT);
+
 export interface AuditFilter {
   tool?: string;
   entityId?: string;
@@ -68,7 +78,7 @@ export function listAudit(filter: AuditFilter = {}): AuditRow[] {
   const sql = `SELECT * FROM audit_log
     ${where.length ? `WHERE ${where.join(" AND ")}` : ""}
     ORDER BY id DESC LIMIT ?`;
-  params.push(filter.limit ?? 200);
+  params.push(filter.limit ?? AUDIT_LIMIT);
   return getDb().prepare(sql).all(...params) as unknown as AuditRow[];
 }
 

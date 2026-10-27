@@ -15,7 +15,7 @@ npm run dev        # http://localhost:3000 redirects to /login; pick a user
 npm run check      # typecheck + lint + tests; must pass before every PR
 ```
 
-The database is a SQLite file at `data/app.db` (override with `DB_PATH`; tests use `:memory:`). On first open it runs the platform migrations, then each tool's, then seeds. `node:sqlite` prints an `ExperimentalWarning`; ignore it.
+The database is a SQLite file at `data/app.db` (override with `DB_PATH`; tests use `:memory:`). Audit queries return at most 200 rows by default; override with `AUDIT_LIMIT` (a positive integer; anything else falls back to 200). On first open it runs the platform migrations, then each tool's, then seeds. `node:sqlite` prints an `ExperimentalWarning`; ignore it.
 
 A fresh database has seeded refunds, KYC cases, disputes and pending approvals, but an empty audit log: audit rows are written by actions, so the log fills up as you click through.
 
@@ -113,7 +113,7 @@ Rules (from `AGENTS.md`): writes only inside `defineAction` or approval handlers
 - **Mock login.** `/login` picks a seeded user and sets a `uid` cookie. No passwords, no sessions, no SSO.
 - **SQLite file.** One local `data/app.db`, single process. No Postgres, no hosting, no backups.
 - **Mocked payments.** `charges` and `payment_refunds` are seeded tables; `refund()` records a row. No real processor.
-- **200-row audit query cap.** `/audit` shows the latest 200 rows for the chosen filter; there is no paging or date range, so older rows are only reachable through the database.
+- **Audit query cap.** `/audit` shows the latest `AUDIT_LIMIT` rows (default 200) for the chosen filter; there is no paging or date range, so older rows are only reachable through the database.
 - **Seeds are not retried after a crash.** Migrations and seeds run on first open; a migration is marked applied before its seed runs, so a crash during seeding leaves empty tables that are not re-seeded on the next start. Run `npm run reset` and start again.
 
 ## Out of scope

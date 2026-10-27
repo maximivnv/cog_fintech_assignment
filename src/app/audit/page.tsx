@@ -1,4 +1,5 @@
 import {
+  AUDIT_LIMIT,
   Alert,
   PageHeader,
   StatusBadge,
@@ -15,8 +16,6 @@ import {
   inputClass,
   linkClass,
 } from "@/platform";
-
-const LIMIT = 200;
 
 function when(iso: string): string {
   return new Date(iso).toLocaleString("en-US", { timeZone: "UTC", hour12: false }) + " UTC";
@@ -62,7 +61,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/audit">) {
 
   const params = await searchParams;
   const tool = typeof params.tool === "string" && params.tool ? params.tool : undefined;
-  const rows = listAudit({ tool, limit: LIMIT });
+  const rows = listAudit({ tool, limit: AUDIT_LIMIT });
   const tools = Array.from(new Set([...toolRegistry.map((t) => t.manifest.slug), ...listAuditTools()])).sort();
 
   return (
@@ -91,7 +90,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/audit">) {
         }
       />
       <p className="mb-2 text-sm text-zinc-500">
-        {rows.length === LIMIT ? `Latest ${LIMIT} rows` : `${rows.length} row${rows.length === 1 ? "" : "s"}`}
+        {rows.length === AUDIT_LIMIT ? `Latest ${AUDIT_LIMIT} rows` : `${rows.length} row${rows.length === 1 ? "" : "s"}`}
         {tool ? ` for ${getTool(tool)?.manifest.name ?? tool}` : ""}, newest first.
       </p>
       <Table rows={rows} columns={columns} rowKey={(r) => r.id} empty="No audit rows yet." />
