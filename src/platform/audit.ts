@@ -46,8 +46,10 @@ export function writeAudit(entry: AuditEntry, db: Db = getDb()): number {
 const DEFAULT_AUDIT_LIMIT = 200;
 
 function parseAuditLimit(raw: string | undefined): number {
-  const n = Number.parseInt(raw ?? "", 10);
-  return Number.isNaN(n) || n <= 0 ? DEFAULT_AUDIT_LIMIT : n;
+  const s = raw?.trim() ?? "";
+  if (!/^\d+$/.test(s)) return DEFAULT_AUDIT_LIMIT;
+  const n = Number(s);
+  return n > 0 && Number.isSafeInteger(n) ? n : DEFAULT_AUDIT_LIMIT;
 }
 
 /** Default row cap for `listAudit`. Override with `AUDIT_LIMIT`. */

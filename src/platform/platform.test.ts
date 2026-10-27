@@ -187,7 +187,7 @@ describe("AUDIT_LIMIT", () => {
     expect(await limitWith("50")).toBe(50);
   });
 
-  it.each(["", "abc", "0", "-5"])("falls back to 200 for %j", async (value) => {
+  it.each(["", "abc", "0", "-5", "50abc", "1.5", "1e3"])("falls back to 200 for %j", async (value) => {
     expect(await limitWith(value)).toBe(200);
   });
 });
