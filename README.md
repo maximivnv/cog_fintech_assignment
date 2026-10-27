@@ -15,7 +15,7 @@ npm run dev        # http://localhost:3000 redirects to /login; pick a user
 npm run check      # typecheck + lint + tests; must pass before every PR
 ```
 
-The database is a SQLite file at `data/app.db` (override with `DB_PATH`; tests use `:memory:`). Audit queries return at most 200 rows by default; override with `AUDIT_LIMIT` (a positive integer; anything else falls back to 200). On first open it runs the platform migrations, then each tool's, then seeds. `node:sqlite` prints an `ExperimentalWarning`; ignore it.
+The database is a SQLite file at `data/app.db` (override with `DB_PATH`; tests use `:memory:`). Audit queries return at most 200 rows by default; override with `AUDIT_LIMIT`, given as plain digits (e.g. `500`). Anything else, such as `0`, `1.5`, `1e3` or `50abc`, falls back to 200. On first open it runs the platform migrations, then each tool's, then seeds. `node:sqlite` prints an `ExperimentalWarning`; ignore it.
 
 A fresh database has seeded refunds, KYC cases, disputes and pending approvals, but an empty audit log: audit rows are written by actions, so the log fills up as you click through.
 
